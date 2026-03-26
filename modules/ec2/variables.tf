@@ -4,3 +4,4 @@ variable "ec2_key_pair" {}
 variable "ec2_instance_storage" {}
 variable "subnet_id" {}
 variable "sg_id" {}
+variable "vpc_id" {}

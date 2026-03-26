@@ -5,7 +5,7 @@ resource "aws_instance" "single" {
   key_name               = var.ec2_key_pair
   subnet_id              = var.subnet_id
 
-  associate_public_ip_address = true
+  #associate_public_ip_address = true
 
   user_data = file("${path.root}/install_nginx.sh")
 
