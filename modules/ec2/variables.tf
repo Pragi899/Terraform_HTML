@@ -5,3 +5,6 @@ variable "ec2_instance_storage" {}
 variable "subnet_id" {}
 variable "sg_id" {}
 variable "vpc_id" {}
+variable "target_group_arn" {
+  type = string
+}

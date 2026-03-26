@@ -6,5 +6,4 @@ variable "security_group_id" {
   description = "Existing security group ID"
 }
 variable "subnet_id" {}
-variable "vpc_id" {}
 variable "public_subnet_ids" {}

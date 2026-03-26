@@ -15,12 +15,11 @@ module "ec2" {
   subnet_id            = var.subnet_id
   sg_id                = var.security_group_id
   vpc_id               = local.vpc_id
+  target_group_arn     = module.alb.target_group_arn
 }
 
 module "alb" {
-  source = "./modules/alb"
-
+  source            = "./modules/alb"
   vpc_id            = local.vpc_id
   public_subnet_ids = var.public_subnet_ids
-  instance_id       = module.ec2.instance_id
 }

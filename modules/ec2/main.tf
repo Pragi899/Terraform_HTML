@@ -1,20 +1,31 @@
-resource "aws_instance" "single" {
-  ami                    = var.ec2_ami_id
-  instance_type          = var.ec2_instance_type
-  vpc_security_group_ids = [var.sg_id]
-  key_name               = var.ec2_key_pair
-  subnet_id              = var.subnet_id
+resource "aws_launch_template" "lt" {
+  name_prefix   = "terraform-lt"
+  image_id      = var.ec2_ami_id
+  instance_type = var.ec2_instance_type
+  key_name      = var.ec2_key_pair
 
-  #associate_public_ip_address = true
+  user_data = base64encode(file("install_nginx.sh"))
 
-  user_data = file("${path.root}/install_nginx.sh")
-
-  root_block_device {
-    volume_size = var.ec2_instance_storage
-    volume_type = "gp3"
-  }
-
-  tags = {
-    Name = "Terraform-HTML"
+  network_interfaces {
+    security_groups = [var.sg_id]
   }
 }
+
+
+resource "aws_autoscaling_group" "asg" {
+  desired_capacity = 2
+  max_size         = 3
+  min_size         = 1
+
+  vpc_zone_identifier = [var.subnet_id]
+
+  launch_template {
+    id      = aws_launch_template.lt.id
+    version = "$Latest"
+  }
+
+  target_group_arns = [var.target_group_arn]
+
+  health_check_type = "EC2"
+}
+
